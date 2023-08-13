@@ -9,7 +9,7 @@ const Sidebar = () => {
       >
         TagMessenger
       </div>
-      <div className="customized-scrollbar flex h-[90vh] flex-grow flex-col justify-between overflow-y-auto overflow-x-hidden">
+      <div className="customized-scrollbar flex h-[90vh] flex-grow flex-col overflow-y-auto overflow-x-hidden">
         <div className="mb-8 flex items-center px-4">
           <input
             type="text"
@@ -21,7 +21,7 @@ const Sidebar = () => {
           </button>
         </div>
         <ul className="flex flex-col items-start px-3">
-          {Array.from(Array(15).keys()).map((i) => (
+          {Array.from(Array(5).keys()).map((i) => (
             <div
               key={i}
               className="flex h-[48px] w-full cursor-pointer justify-between rounded px-2 transition delay-100 ease-in hover:bg-[#8A69CE]"
