@@ -4,7 +4,7 @@ const MessengerBox = () => {
       {Array.from(Array(15).keys()).map((i) => (
         <div
           key={i}
-          className="messenger-box_message my-3 h-fit w-[95%] rounded bg-white p-4 text-left"
+          className="messenger-box_message my-2 h-fit w-[95%] rounded bg-white p-4 text-left"
         >
           All the Lorem Ipsum generators on the Internet tend to repeat
           predefined chunks as necessary
