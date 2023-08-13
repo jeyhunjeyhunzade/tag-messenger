@@ -13,6 +13,7 @@ const Sidebar = () => {
         <div className="mb-8 flex items-center px-4">
           <input
             type="text"
+            maxLength={16}
             className="h-[48px] w-[205px] rounded-l border border-white bg-[#6743B1] px-4 text-white placeholder-white focus:outline-none"
             placeholder="New tag"
           />
@@ -26,7 +27,9 @@ const Sidebar = () => {
               key={i}
               className="flex h-[48px] w-full cursor-pointer justify-between rounded px-2 transition delay-100 ease-in hover:bg-[#8A69CE]"
             >
-              <li className="self-center text-xl text-white">#testtag</li>
+              <li className="self-center text-xl text-white">
+                #testtesttesttest
+              </li>
               <div className="flex items-center">
                 <FaTrashAlt color="#A48ED0" size={17} />
               </div>
