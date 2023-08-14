@@ -3,6 +3,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import { BiSolidSend } from "react-icons/bi";
 
 import "react-bootstrap-typeahead/css/Typeahead.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const MessengerController = () => {
   const [multiSelections, setMultiSelections] = useState<any>([]);
@@ -11,32 +12,16 @@ const MessengerController = () => {
 
   return (
     <div className="w-[90%]">
-      <div className="mb-[18px] flex w-[100%] border-b-2 border-[#6743B1]">
-        <span className="mr-1 text-[#6743B1]">Tags:</span>
-        {/* <input
-          type="text"
-          className="focus:border-red h-[24px] w-[100%] border-0 text-[#6743B1]"
-          onChange={(e) => {
-            console.log("here");
-            e.target.value.replace(/\s/g, " #");
-          }}
-        /> */}
+      <div className="flex h-[50px] w-[100%]">
         <Typeahead
-          id="basic-typeahead-multiple"
+          id="custom-typeahead"
           labelKey="name"
           multiple
           onChange={setMultiSelections}
           options={options}
-          placeholder=""
+          placeholder="Tags"
           selected={multiSelections}
-          className="custom-typehead h-[24px] w-[100%] border-0"
-          inputProps={{
-            className: "custom-typehead",
-            style: {
-              backgroundColor: "#6743B1",
-              color: "#fff",
-            },
-          }}
+          className="h-[24px] w-[100%] border-0 text-[#6743B1] placeholder-[#6743B1]"
         />
       </div>
       <div className="relative flex w-[100%] items-center">

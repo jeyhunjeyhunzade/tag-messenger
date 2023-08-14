@@ -87,3 +87,22 @@ p, h1, h2, h3, h4, h5, h6 {
 .messenger-box_message {
   box-shadow: 0px 4px 20px 0px rgba(103, 67, 177, 0.12);
 }
+
+
+
+#custom-typeahead {
+  inset: -180px auto auto 0px !important;
+}
+
+.rbt-input-main::placeholder {
+  color: #6743B1 !important;
+}
+
+.dropdown-item {
+  color: #6743B1;
+}
+
+.rbt-token {
+  background-color: #F0ECF7;
+  color: #6743B1;
+}
