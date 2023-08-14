@@ -5,7 +5,7 @@ const Sidebar = () => {
     <div className="h-full w-[20%] border-l border-gray-300 bg-[#6743B1] pt-3">
       <div
         id="test"
-        className="mb-8 flex justify-center text-2xl font-semibold text-white"
+        className="mb-8 flex justify-center pt-2 text-2xl font-semibold text-white"
       >
         TagMessenger
       </div>
