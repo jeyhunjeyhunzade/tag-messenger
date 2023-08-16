@@ -16,7 +16,7 @@ const Sidebar = () => {
     createTag,
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([["tags"]]);
+        queryClient.invalidateQueries(["tags"]);
       },
       onError: errorHandler,
     }
@@ -26,7 +26,7 @@ const Sidebar = () => {
     deleteTag,
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([["tags"]]);
+        queryClient.invalidateQueries(["tags"]);
       },
       onError: errorHandler,
     }
@@ -37,6 +37,7 @@ const Sidebar = () => {
       toast.error("Please provide a tag name");
     } else {
       createTagMutate({ tag: newTag });
+      setNewTag("");
     }
   };
 
@@ -59,6 +60,7 @@ const Sidebar = () => {
             maxLength={16}
             className="h-[48px] w-[205px] rounded-l border border-white bg-[#6743B1] px-4 text-white placeholder-white focus:outline-none"
             placeholder="New tag"
+            value={newTag}
             onChange={(e) => {
               setNewTag(e.target.value);
             }}

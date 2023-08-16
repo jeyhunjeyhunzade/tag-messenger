@@ -17,7 +17,6 @@ export const createTag = async (tagData: any) => {
 };
 
 export const deleteTag = async (tagData: any) => {
-  console.log("tagData: ", tagData);
   const res = await axios.delete(`${serverUrl}/deleteTag`, {
     data: { tagData },
   });
