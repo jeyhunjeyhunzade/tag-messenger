@@ -91,7 +91,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 
 #custom-typeahead {
-  inset: -180px auto auto 0px !important;
+  /* inset: -150px auto auto 0px !important; */
 }
 
 .rbt-input-main::placeholder {

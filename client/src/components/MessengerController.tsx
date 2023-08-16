@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { BiSolidSend } from "react-icons/bi";
+import { AppContext } from "@app/pages/App";
 
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const MessengerController = () => {
   const [multiSelections, setMultiSelections] = useState<any>([]);
+  const { tagsData } = useContext(AppContext);
 
-  const options = ["AAA", "BBB", "CCC", "DDD"];
+  const tags = tagsData?.map((tag: any) => tag.name);
 
   return (
     <div className="w-[90%]">
@@ -18,9 +20,10 @@ const MessengerController = () => {
           labelKey="name"
           multiple
           onChange={setMultiSelections}
-          options={options}
+          options={tags ? tags : []}
           placeholder="Tags"
           selected={multiSelections}
+          dropup
           className="h-[24px] w-[100%] border-0 text-[#6743B1] placeholder-[#6743B1]"
         />
       </div>

@@ -4,7 +4,6 @@ const cors = require("cors");
 var helmet = require("helmet");
 var compression = require("compression");
 const queries = require("./queries");
-const Auth = require("./helpers/auth.js");
 
 //port
 const port = 8000;
@@ -17,14 +16,12 @@ app.use(express.json());
 app.use(helmet());
 app.use(compression());
 
-//Users
-app.post("/login", queries.Users.loginUser);
-app.post("/signUp", queries.Users.createUser);
-app.get("/users/:id", Auth.authenticateToken, queries.Users.getUserById);
-app.get("/users", Auth.authenticateToken, queries.Users.getUsers);
-app.delete("/users", Auth.authenticateToken, queries.Users.deleteUser);
-app.patch("/users/block", Auth.authenticateToken, queries.Users.blockUser);
-app.patch("/users/unblock", Auth.authenticateToken, queries.Users.unBlockUser);
+app.get("/messages", queries.Messenger.getMessages);
+app.get("/tags", queries.Messenger.getTags);
+app.post("/message", queries.Messenger.sendMessage);
+// TODO: create and delete tag
+app.post("/createTag", queries.Messenger.createTag);
+app.delete("/deleteTag", queries.Messenger.deleteTag);
 
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}.`);
