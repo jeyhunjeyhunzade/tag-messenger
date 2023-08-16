@@ -4,7 +4,6 @@ const cors = require("cors");
 var helmet = require("helmet");
 var compression = require("compression");
 const queries = require("./queries");
-const Auth = require("./helpers/auth.js");
 
 //port
 const port = 8000;
@@ -17,7 +16,12 @@ app.use(express.json());
 app.use(helmet());
 app.use(compression());
 
-//Messages
+
+app.get("/messages", queries.Messenger.getMessages);
+app.get("/tags", queries.Messenger.getTags);
+app.post("/message", queries.Messenger.sendMessage);
+app.post("/createTag", queries.Messenger.createTag);
+app.delete("/deleteTag", queries.Messenger.deleteTag);
 
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}.`);
