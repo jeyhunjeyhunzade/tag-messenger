@@ -16,10 +16,10 @@ app.use(express.json());
 app.use(helmet());
 app.use(compression());
 
+
 app.get("/messages", queries.Messenger.getMessages);
 app.get("/tags", queries.Messenger.getTags);
 app.post("/message", queries.Messenger.sendMessage);
-// TODO: create and delete tag
 app.post("/createTag", queries.Messenger.createTag);
 app.delete("/deleteTag", queries.Messenger.deleteTag);
 
