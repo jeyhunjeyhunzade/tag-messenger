@@ -4,16 +4,22 @@ import socket from "@app/api/socket";
 import MessengerBox from "@app/components/MessengerBox";
 import MessengerController from "@app/components/MessengerController";
 import Sidebar from "@app/components/Sidebar";
+import {
+  AppContextShape,
+  Message,
+  NewMessage,
+  TagsData,
+} from "@app/types/types";
 import { errorHandler } from "@app/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const AppContext = createContext<any>(null);
+export const AppContext = createContext<AppContextShape | null>(null);
 
 const App = () => {
-  const [selectedTags, setSelectedTags] = useState<any>([]);
-  const [messages, setMessages] = useState<any>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
-  const { data: tagsData, isLoading: isTagsLoading } = useQuery<any>(
+  const { data: tagsData, isLoading: isTagsLoading } = useQuery<TagsData[]>(
     ["tags"],
     getTags,
     {
@@ -31,14 +37,23 @@ const App = () => {
     });
 
   useEffect(() => {
-    const getMessagesListener = (data: any) => {
+    const getMessagesListener = (data: NewMessage) => {
       const { messageId, message, tags } = data.newMessage;
-      console.log("message from socket", data.newMessage);
-      tags.forEach((tag: string) => {
-        if (selectedTags.includes(tag)) {
-          setMessages([...messages, { id: messageId, message }]);
-        }
-      });
+      if (tags.length > 0) {
+        tags.forEach((tag: string) => {
+          if (selectedTags.includes(tag)) {
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              { id: messageId, message },
+            ]);
+          }
+        });
+      } else {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { id: messageId, message },
+        ]);
+      }
     };
 
     socket.on("getMessages", getMessagesListener);
@@ -51,10 +66,6 @@ const App = () => {
   useEffect(() => {
     getMessagesMutate({ tags: selectedTags });
   }, [selectedTags]);
-
-  useEffect(() => {
-    console.log("messages changed: ", messages);
-  }, [messages]);
 
   return (
     <AppContext.Provider

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.32.6",
+    "@types/react-bootstrap-typeahead": "^5.1.9",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.1",
     "eslint-plugin-simple-import-sort": "^9.0.0",

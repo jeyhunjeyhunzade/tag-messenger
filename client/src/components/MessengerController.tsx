@@ -4,6 +4,7 @@ import { BiSolidSend } from "react-icons/bi";
 import { sendMessage } from "@app/api/messenger";
 import socket from "@app/api/socket";
 import { AppContext } from "@app/pages/App";
+import { AppContextShape, TagsData } from "@app/types/types";
 import { errorHandler } from "@app/utils";
 import { useMutation } from "@tanstack/react-query";
 
@@ -11,16 +12,15 @@ import "react-bootstrap-typeahead/css/Typeahead.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const MessengerController = () => {
-  const [selectedTags, setSelectedTags] = useState<any>([]);
+  const [selectedTags, setSelectedTags] = useState<string[] | any>([]);
   const [messageContent, setMessageContent] = useState("");
-  const { tagsData } = useContext(AppContext);
+  const { tagsData } = useContext(AppContext) as AppContextShape;
 
-  const tags = tagsData?.map((tag: any) => tag.name);
+  const tags = tagsData?.map((tag: TagsData) => tag.name);
 
-  const { mutate: sendMessageMutate, isLoading: deleteMessageMutate } =
-    useMutation(sendMessage, {
-      onError: errorHandler,
-    });
+  const { mutate: sendMessageMutate } = useMutation(sendMessage, {
+    onError: errorHandler,
+  });
 
   const handleSendMessage = () => {
     if (messageContent) {
