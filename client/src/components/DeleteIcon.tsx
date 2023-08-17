@@ -6,7 +6,16 @@ const DeleteIcon = ({ onClick, data }: DeleteIconProps) => {
     onClick(data);
   };
 
-  return <FaTrashAlt color="#A48ED0" size={17} onClick={handleClick} />;
+  return (
+    <FaTrashAlt
+      color="#A48ED0"
+      size={17}
+      onClick={(e) => {
+        e.stopPropagation();
+        handleClick();
+      }}
+    />
+  );
 };
 
 export default DeleteIcon;
