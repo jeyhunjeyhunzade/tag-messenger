@@ -18,10 +18,6 @@ const App = () => {
     }
   );
 
-  useEffect(() => {
-    console.log("tagsData: ", tagsData);
-  }, [isTagLoading]);
-
   return (
     <AppContext.Provider value={{ tagsData }}>
       <div className="flex h-[100vh] overflow-hidden">

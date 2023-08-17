@@ -1,4 +1,4 @@
-import { Server } from "socket.io";
+const { Server } = require("socket.io");
 
 const io = new Server(null, {
   pingInterval: 10000,
@@ -9,7 +9,7 @@ const io = new Server(null, {
   },
 });
 
-export const initSocketServer = (server) => {
+const initSocketServer = (server) => {
   io.attach(server);
 
   io.on("connection", (socket) => {
@@ -17,4 +17,4 @@ export const initSocketServer = (server) => {
   });
 };
 
-export { io };
+module.exports = { io, initSocketServer };
