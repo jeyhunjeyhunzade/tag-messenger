@@ -3,10 +3,6 @@ const { Server } = require("socket.io");
 const io = new Server(null, {
   pingInterval: 10000,
   pingTimeout: 5000,
-  cors: {
-    origin: "http://localhost:5173",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  },
 });
 
 const initSocketServer = (server) => {
