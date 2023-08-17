@@ -1,13 +1,17 @@
+import { useContext } from "react";
+import { AppContext } from "@app/pages/App";
+
 const MessengerBox = () => {
+  const { messages } = useContext(AppContext);
+
   return (
     <div className="messenger-box customized-scrollbar flex h-[80%] w-[90%] flex-col items-center overflow-y-auto overflow-x-hidden rounded bg-[#F0ECF7] pt-3">
-      {Array.from(Array(15).keys()).map((i) => (
+      {messages.map(({ id, message }: any) => (
         <div
-          key={i}
+          key={id}
           className="messenger-box_message my-2 h-fit w-[95%] rounded bg-white p-4 text-left"
         >
-          All the Lorem Ipsum generators on the Internet tend to repeat
-          predefined chunks as necessary
+          {message}
         </div>
       ))}
     </div>

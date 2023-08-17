@@ -1,17 +1,16 @@
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
-import { FaTrashAlt } from "react-icons/fa";
 import { createTag, deleteTag } from "@app/api/messenger";
 import { queryClient } from "@app/index";
 import { AppContext } from "@app/pages/App";
-import { errorHandler } from "@app/utils";
+import { classNames, errorHandler } from "@app/utils";
 import { useMutation } from "@tanstack/react-query";
 import DeleteIcon from "./DeleteIcon";
 
 const Sidebar = () => {
   const [newTag, setNewTag] = useState("");
 
-  const { tagsData } = useContext(AppContext);
+  const { tagsData, selectedTags, setSelectedTags } = useContext(AppContext);
   const { mutate: createTagMutate, isLoading: createTagLoading } = useMutation(
     createTag,
     {
@@ -41,8 +40,18 @@ const Sidebar = () => {
     }
   };
 
-  const handleDeleteTag = (tag: any) => {
+  const handleDeleteTag = (tag: string) => {
     deleteTagMutate({ tag });
+  };
+
+  const handleSelectTag = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(
+        selectedTags.filter((existingTag: string) => existingTag !== tag)
+      );
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
   };
 
   return (
@@ -75,8 +84,16 @@ const Sidebar = () => {
         <ul className="flex flex-col items-start px-3">
           {tagsData?.map((tag: any, i: number) => (
             <div
+              role="checkbox"
+              aria-checked="mixed"
+              tabIndex={0}
               key={i}
-              className="flex h-[48px] w-full cursor-pointer justify-between rounded px-2 transition delay-100 ease-in hover:bg-[#8A69CE]"
+              onClick={() => handleSelectTag(tag.name)}
+              onKeyDown={() => handleSelectTag(tag.name)}
+              className={classNames(
+                "mb-1 flex h-[48px] w-full cursor-pointer justify-between rounded px-2 transition delay-100 ease-in hover:bg-[#8A69CE]",
+                selectedTags.includes(tag.name) ? "bg-[#8A69CE]" : null
+              )}
             >
               <li className="self-center text-xl text-white">{`# ${tag.name}`}</li>
               <div className="flex items-center">

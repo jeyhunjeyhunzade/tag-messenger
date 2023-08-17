@@ -4,7 +4,7 @@ const { io } = require("../socket");
 const Messenger = {
   sendMessage: async (req, res) => {
     try {
-      const { message, tags } = req.body.data.messageData;
+      const { message, tags } = req.body;
 
       await pool.query("BEGIN");
 
