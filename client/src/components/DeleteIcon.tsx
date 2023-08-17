@@ -1,6 +1,7 @@
 import { FaTrashAlt } from "react-icons/fa";
+import { DeleteIconProps } from "@app/types/types";
 
-const DeleteIcon = ({ onClick, data }: any) => {
+const DeleteIcon = ({ onClick, data }: DeleteIconProps) => {
   const handleClick = () => {
     onClick(data);
   };

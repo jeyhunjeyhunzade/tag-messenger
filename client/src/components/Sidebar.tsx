@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { createTag, deleteTag } from "@app/api/messenger";
 import { queryClient } from "@app/index";
 import { AppContext } from "@app/pages/App";
+import { AppContextShape, TagsData } from "@app/types/types";
 import { classNames, errorHandler } from "@app/utils";
 import { useMutation } from "@tanstack/react-query";
 import DeleteIcon from "./DeleteIcon";
@@ -10,26 +11,22 @@ import DeleteIcon from "./DeleteIcon";
 const Sidebar = () => {
   const [newTag, setNewTag] = useState("");
 
-  const { tagsData, selectedTags, setSelectedTags } = useContext(AppContext);
-  const { mutate: createTagMutate, isLoading: createTagLoading } = useMutation(
-    createTag,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["tags"]);
-      },
-      onError: errorHandler,
-    }
-  );
+  const { tagsData, selectedTags, setSelectedTags } = useContext(
+    AppContext
+  ) as AppContextShape;
+  const { mutate: createTagMutate } = useMutation(createTag, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["tags"]);
+    },
+    onError: errorHandler,
+  });
 
-  const { mutate: deleteTagMutate, isLoading: deleteTagLoading } = useMutation(
-    deleteTag,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["tags"]);
-      },
-      onError: errorHandler,
-    }
-  );
+  const { mutate: deleteTagMutate } = useMutation(deleteTag, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["tags"]);
+    },
+    onError: errorHandler,
+  });
 
   const handleAddNewTag = () => {
     if (!newTag) {
@@ -82,7 +79,7 @@ const Sidebar = () => {
           </button>
         </div>
         <ul className="flex flex-col items-start px-3">
-          {tagsData?.map((tag: any, i: number) => (
+          {tagsData?.map((tag: TagsData, i: number) => (
             <div
               role="checkbox"
               aria-checked="mixed"
