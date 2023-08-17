@@ -21,8 +21,8 @@ app.use(express.json());
 app.use(helmet());
 app.use(compression());
 
-app.post("/messages", queries.Messenger.getMessages);
 app.get("/tags", queries.Messenger.getTags);
+app.post("/messages", queries.Messenger.getMessages);
 app.post("/sendMessage", queries.Messenger.sendMessage);
 app.post("/createTag", queries.Messenger.createTag);
 app.delete("/deleteTag", queries.Messenger.deleteTag);

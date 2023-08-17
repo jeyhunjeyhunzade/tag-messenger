@@ -1,16 +1,42 @@
 import { useContext, useState } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { BiSolidSend } from "react-icons/bi";
+import { sendMessage } from "@app/api/messenger";
+import { queryClient } from "@app/index";
 import { AppContext } from "@app/pages/App";
+import { errorHandler } from "@app/utils";
+import { useMutation } from "@tanstack/react-query";
 
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const MessengerController = () => {
-  const [multiSelections, setMultiSelections] = useState<any>([]);
+  const [selectedTags, setSelectedTags] = useState<any>([]);
+  const [messageContent, setMessageContent] = useState("");
   const { tagsData } = useContext(AppContext);
 
   const tags = tagsData?.map((tag: any) => tag.name);
+
+  const { mutate: sendMessageMutate, isLoading: deleteMessageMutate } =
+    useMutation(sendMessage, {
+      onSuccess: () => {
+        // TODO: is it required?
+        // queryClient.invalidateQueries(["messages"]);
+        console.log("socket emit...");
+      },
+      onError: errorHandler,
+    });
+
+  const handleSendMessage = () => {
+    if (messageContent) {
+      console.log("here");
+      sendMessageMutate({
+        message: messageContent,
+        tags: selectedTags,
+      });
+      setMessageContent("");
+    }
+  };
 
   return (
     <div className="w-[90%]">
@@ -19,20 +45,35 @@ const MessengerController = () => {
           id="custom-typeahead"
           labelKey="name"
           multiple
-          onChange={setMultiSelections}
+          onChange={setSelectedTags}
           options={tags ? tags : []}
           placeholder="Tags"
-          selected={multiSelections}
+          selected={selectedTags}
           dropup
           className="h-[24px] w-[100%] border-0 text-[#6743B1] placeholder-[#6743B1]"
         />
       </div>
       <div className="relative flex w-[100%] items-center">
         <textarea
-          className="h-[58px] w-full resize-none rounded border-0 bg-[#F0ECF7] p-2 pr-10 text-base placeholder-[#6743B1] placeholder:-translate-y-[-9px]"
+          value={messageContent}
+          onChange={(e) => {
+            setMessageContent(e.target.value);
+          }}
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              handleSendMessage();
+            }
+          }}
+          className="custom-textarea h-[58px] w-full resize-none rounded border-0 bg-[#F0ECF7] p-2 pr-10 text-base placeholder-[#6743B1] placeholder:-translate-y-[-9px]"
           placeholder="Send a message"
         ></textarea>
-        <div className="absolute top-2 right-2 translate-y-1/2 transform">
+        <div
+          role="button"
+          tabIndex={0}
+          className="absolute top-2 right-2 translate-y-1/2 transform"
+          onClick={handleSendMessage}
+          onKeyDown={handleSendMessage}
+        >
           <BiSolidSend size={20} color="#6743B1" cursor="pointer" />
         </div>
       </div>

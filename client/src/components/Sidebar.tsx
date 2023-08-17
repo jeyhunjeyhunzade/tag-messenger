@@ -62,7 +62,7 @@ const Sidebar = () => {
             placeholder="New tag"
             value={newTag}
             onChange={(e) => {
-              setNewTag(e.target.value);
+              setNewTag(e.target.value.replace(/\s/g, ""));
             }}
           />
           <button

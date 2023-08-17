@@ -22,3 +22,10 @@ export const deleteTag = async (tagData: any) => {
   });
   return res?.data;
 };
+
+export const sendMessage = async (messageData: any) => {
+  const res = await axios.post(`${serverUrl}/sendMessage`, {
+    data: { messageData },
+  });
+  return res?.data;
+};
