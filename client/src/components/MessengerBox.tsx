@@ -1,8 +1,9 @@
 import { useContext, useEffect, useRef } from "react";
 import { AppContext } from "@app/pages/App";
+import { AppContextShape } from "@app/types/types";
 
 const MessengerBox = () => {
-  const { messages } = useContext(AppContext);
+  const { messages } = useContext(AppContext) as AppContextShape;
   const messengerBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
