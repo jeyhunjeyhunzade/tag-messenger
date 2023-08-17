@@ -1,41 +1,44 @@
 const pool = require("../config");
+const { io } = require("../socket");
 
 const Messenger = {
   sendMessage: async (req, res) => {
     try {
-      const { message, tag } = req.body;
+      const { message, tags } = req.body;
+      await pool.query("BEGIN");
 
-      let tagId;
+      const messageResult = await pool.query(
+        "INSERT INTO messages (message) VALUES ($1) RETURNING id",
+        [message]
+      );
+      const messageId = messageResult.rows[0].id;
 
-      if (tag.trim() !== "") {
-        const query = "SELECT id FROM tags WHERE tag = $1";
-        const result = await pool.query(query, [tag]);
+      if (tags && tags.length > 0) {
+        const tagIdsResult = await pool.query(
+          "SELECT id FROM tags WHERE name = ANY($1)",
+          [tags]
+        );
+        const tagIds = tagIdsResult.rows.map((row) => row.id);
 
-        if (result.rows.length > 0) {
-          tagId = result.rows[0].id;
-        } else {
-          const insertQuery =
-            "INSERT INTO tags (tag) VALUES ($1) RETURNING id, tag";
-          const insertResult = await pool.query(insertQuery, [tag]);
-          tagId = insertResult.rows[0].id;
+        for (const tagId of tagIds) {
+          await pool.query(
+            "INSERT INTO message_tags (messageId, tagId) VALUES ($1, $2)",
+            [messageId, tagId]
+          );
         }
       }
 
-      const insertMessageQuery =
-        "INSERT INTO messages (message, tag_id) VALUES ($1, $2) RETURNING *";
-      const insertMessageResult = await pool.query(insertMessageQuery, [
-        message,
-        tagId,
-      ]);
+      await pool.query("COMMIT");
 
       const newMessage = {
-        id: insertMessageResult.rows[0].id,
-        message: insertMessageResult.rows[0].message,
-        tag: tag,
+        messageId,
+        message,
+        tags,
       };
 
-      io.emit("getMessage", newMessage);
-
+      io.emit("getMessage", {
+        newMessage,
+      });
       res.json(newMessage);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -45,28 +48,33 @@ const Messenger = {
     try {
       const query = "SELECT * FROM tags";
       const result = await pool.query(query);
-      if (result.rows.length > 0) {
-        res.status(200).json(result.rows);
-      } else {
-        res.status(200).json(result.rows);
-      }
+      res.status(200).json(result.rows);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
   getMessages: async (req, res) => {
+    const tags = req.body.tags;
+
     try {
-      const query =
-        "SELECT messages.*, tags.tag FROM messages LEFT JOIN tags ON messages.tag_id = tags.id";
-      const result = await pool.query(query);
+      let result = null;
+      if (tags?.length > 0) {
+        result = await pool.query(
+          "SELECT DISTINCT ON (m.id) m.id AS message_id, m.message FROM messages m JOIN message_tags mt ON m.id = mt.messageId JOIN tags t ON mt.tagId = t.id WHERE t.name = ANY($1) ORDER BY m.id;",
+          [tags]
+        );
+      } else {
+        result = await pool.query(
+          "SELECT DISTINCT ON (m.id) m.id AS message_id, m.message FROM messages m LEFT JOIN message_tags mt ON m.id = mt.messageId LEFT JOIN tags t ON mt.tagId = t.id WHERE t.name IS NULL"
+        );
+      }
 
       const messagesWithTags = result.rows.map((row) => ({
-        id: row.id,
+        id: row.message_id,
         message: row.message,
-        tag: row.tag,
       }));
 
-      res.json(messagesWithTags);
+      res.status(200).json(messagesWithTags);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
