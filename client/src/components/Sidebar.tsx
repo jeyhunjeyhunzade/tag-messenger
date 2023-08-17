@@ -89,7 +89,11 @@ const Sidebar = () => {
               tabIndex={0}
               key={i}
               onClick={() => handleSelectTag(tag.name)}
-              onKeyDown={() => handleSelectTag(tag.name)}
+              onKeyDown={(e) => {
+                if (e.key === " " || e.key === "Spacebar") {
+                  handleSelectTag(tag.name);
+                }
+              }}
               className={classNames(
                 "mb-1 flex h-[48px] w-full cursor-pointer justify-between rounded px-2 transition delay-100 ease-in hover:bg-[#8A69CE]",
                 selectedTags.includes(tag.name) ? "bg-[#8A69CE]" : null

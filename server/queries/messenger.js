@@ -37,9 +37,10 @@ const Messenger = {
         tags,
       };
 
-      io.emit("getMessage", {
+      io.emit("getMessages", {
         newMessage,
       });
+
       res.json(newMessage);
     } catch (error) {
       res.status(500).json({ message: error.message });

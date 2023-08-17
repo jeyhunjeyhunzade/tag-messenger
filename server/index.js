@@ -27,6 +27,6 @@ app.post("/sendMessage", queries.Messenger.sendMessage);
 app.post("/createTag", queries.Messenger.createTag);
 app.delete("/deleteTag", queries.Messenger.deleteTag);
 
-app.listen(port, () => {
-  console.log(`server started at http://localhost:${port}.`);
+server.listen(port, () => {
+  console.log(`Server listening on port: ${port}.`);
 });

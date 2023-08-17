@@ -6,9 +6,9 @@ const MessengerBox = () => {
 
   return (
     <div className="messenger-box customized-scrollbar flex h-[80%] w-[90%] flex-col items-center overflow-y-auto overflow-x-hidden rounded bg-[#F0ECF7] pt-3">
-      {messages.map(({ id, message }: any) => (
+      {messages.map(({ id, message }: any, i: number) => (
         <div
-          key={id}
+          key={i}
           className="messenger-box_message my-2 h-fit w-[95%] rounded bg-white p-4 text-left"
         >
           {message}

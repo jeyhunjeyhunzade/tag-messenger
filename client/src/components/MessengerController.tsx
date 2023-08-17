@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { BiSolidSend } from "react-icons/bi";
 import { sendMessage } from "@app/api/messenger";
-import { queryClient } from "@app/index";
+import socket from "@app/api/socket";
 import { AppContext } from "@app/pages/App";
 import { errorHandler } from "@app/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -19,17 +19,12 @@ const MessengerController = () => {
 
   const { mutate: sendMessageMutate, isLoading: deleteMessageMutate } =
     useMutation(sendMessage, {
-      onSuccess: () => {
-        // TODO: is it required?
-        // queryClient.invalidateQueries(["messages"]);
-        console.log("socket emit...");
-      },
       onError: errorHandler,
     });
 
   const handleSendMessage = () => {
     if (messageContent) {
-      console.log("here");
+      socket.emit("sendMessage", messageContent);
       sendMessageMutate({
         message: messageContent,
         tags: selectedTags,

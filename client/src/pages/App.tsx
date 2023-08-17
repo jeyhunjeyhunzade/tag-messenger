@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { getMessages, getTags } from "@app/api/messenger";
+import socket from "@app/api/socket";
 import MessengerBox from "@app/components/MessengerBox";
 import MessengerController from "@app/components/MessengerController";
 import Sidebar from "@app/components/Sidebar";
@@ -10,7 +11,7 @@ export const AppContext = createContext<any>(null);
 
 const App = () => {
   const [selectedTags, setSelectedTags] = useState<any>([]);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any>([]);
 
   const { data: tagsData, isLoading: isTagsLoading } = useQuery<any>(
     ["tags"],
@@ -30,8 +31,30 @@ const App = () => {
     });
 
   useEffect(() => {
+    const getMessagesListener = (data: any) => {
+      const { messageId, message, tags } = data.newMessage;
+      console.log("message from socket", data.newMessage);
+      tags.forEach((tag: string) => {
+        if (selectedTags.includes(tag)) {
+          setMessages([...messages, { id: messageId, message }]);
+        }
+      });
+    };
+
+    socket.on("getMessages", getMessagesListener);
+
+    return () => {
+      socket.off("getMessages", getMessagesListener);
+    };
+  }, [selectedTags]);
+
+  useEffect(() => {
     getMessagesMutate({ tags: selectedTags });
   }, [selectedTags]);
+
+  useEffect(() => {
+    console.log("messages changed: ", messages);
+  }, [messages]);
 
   return (
     <AppContext.Provider
