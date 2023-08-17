@@ -1,6 +1,6 @@
 import io from "socket.io-client";
-import { serverUrl } from "./apiClient";
+import { socketServerUrl } from "./apiClient";
 
-const socket = io(serverUrl, { transports: ["websocket"] });
+const socket = io(socketServerUrl, { transports: ["websocket"] });
 
 export default socket;
